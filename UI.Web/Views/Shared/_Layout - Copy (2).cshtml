@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DocumentManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 1rem;
+        }
+
+        .navbar-brand {
+            color: #555 !important;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .nav-link {
+            color: #666 !important;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+            .nav-link:hover {
+                color: #333 !important;
+            }
+
+        .navbar-nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 5px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+            .table th, .table td {
+                padding: 1rem;
+                border-bottom: 1px solid #e0e0e0;
+                text-align: right;
+            }
+
+            .table th {
+                background: #f8f8f8;
+                font-weight: 600;
+                color: #444;
+            }
+
+        .toast-container {
+            z-index: 1050;
+        }
+
+        .toast {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: #fff;
+        }
+
+        .toast-header {
+            background: #f8f8f8;
+            color: #444;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .toast-body {
+            color: #555;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: background 0.3s ease;
+        }
+
+        .modal {
+            z-index: 1060 !important;
+        }
+
+        .modal-backdrop {
+            z-index: 1055 !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#">مدیریت مستندات</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="FileUpload" asp-action="Index">فایل‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AttachmentType" asp-action="Index">انواع پیوست</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customer" asp-action="Index">مشتریان</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="toast-container position-fixed bottom-0 start-0 p-3">
+            <div id="toastContainer"></div>
+        </div>
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var toastContainer = $("#toastContainer");
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            var errorMessage = Html.Raw(Json.Serialize(TempData["ErrorMessage"]));
+            <text>
+                    toastContainer.append(`
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                            <div class="toast-header bg-danger text-white">
+                                <strong class="me-auto">خطا</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">${@errorMessage}</div>
+                        </div>
+                    `);
+            </text>
+        }
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            var successMessage = Html.Raw(Json.Serialize(TempData["SuccessMessage"]));
+            <text>
+                    toastContainer.append(`
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                            <div class="toast-header bg-success text-white">
+                                <strong class="me-auto">موفقیت</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">${@successMessage}</div>
+                        </div>
+                    `);
+            </text>
+        }
+
+            $(".toast").each(function () {
+                new bootstrap.Toast(this).show();
+            });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

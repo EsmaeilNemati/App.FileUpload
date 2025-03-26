@@ -1,0 +1,17 @@
+﻿@model Application.ViewModel.Customers.CustomerViewModel
+
+<div class="container mt-5">
+    <h2>افزودن مشتری</h2>
+    <form asp-action="Create" class="p-4 bg-light rounded shadow">
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">ثبت</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

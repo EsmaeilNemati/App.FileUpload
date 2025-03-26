@@ -1,0 +1,100 @@
+1-Domain
+2-Application
+3-Persistence
+4-Infrastructure
+5-Presentation
+
+===========================================
+Folders
+Doc
+Test
+Src
+==> Common
+=========>Common
+==>Core
+=========>Domain
+=========>Application
+==>Infrastructure
+=========>Infrastructure
+=========>persistence
+==>Presentation
+=========>EndPoint
+============================================
+Package
+1-Domai
+
+2-Application
+NuGet\Install-Package Microsoft.EntityFrameworkCore -Version 6.0.0
+
+3-Persistance
+NuGet\Install-Package Microsoft.EntityFrameworkCore -Version 6.0.0
+NuGet\Install-Package Microsoft.EntityFrameworkCore.Tools -Version 6.0.0
+NuGet\Install-Package Microsoft.EntityFrameworkCore.Relational -Version 6.0.0
+NuGet\Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 6.0.0
+4-
+
+5-Presentation
+NuGet\Install-Package Microsoft.EntityFrameworkCore -Version 6.0.0
+NuGet\Install-Package Microsoft.EntityFrameworkCore.SqlServer -Version 6.0.0
+NuGet\Install-Package Microsoft.EntityFrameworkCore.Design -Version 6.0.0
+NuGet\Install-Package Microsoft.VisualStudio.Web.CodeGeneration.Design -Version 6.0.0-preview.5.21321.1
+============================================
+1- Entitiy - Enum - ValueObject-
+2-Interface -Logic- CommandQurey -Exception -validator
+3-dbcontext migration  config ef seed
+4-sms email  api clinte file system 
+5-end poin 
+
+=========================================
+End poin  Program
+
+//Add ConnectionString
+string Conctionstring = builder.Configuration["Conction"];
+builder.Services.AddDbContext<DataBaseContext>(
+ p => p.UseSqlServer(Conctionstring));
+
+builder.Services.AddTransient<IGetCitiesService, GetCitiesService>();
+"Conction": "Data Source =.; Initial Catalog = FirstCleanArtichitectureDB; User ID = sa; Password = Seven123; encrypt = true; TrustServerCertificate = true;"
+
+===========================================
+namespace Application.Interfaces.Contexts
+{
+    public interface IDataBaseContext
+    {
+        DbSet<User> Users { get; set; }
+
+
+
+        int SaveChanges();
+        int SaveChanges(bool acceptAllChangesOnSuccess);
+        Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default);
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    }
+}
+=============================================
+namespace Persistence.Context
+{
+    public class DataBaseContext : DbContext,IDataBaseContext
+    {
+        public DataBaseContext(DbContextOptions option):base(option)
+        {
+                
+        }
+        public DbSet<User> Users { get; set; }
+ 
+protected override void OnModelCreating(ModelBuilder builder)
+ {
+     //builder.Entity<User>().Property<DateTime>("InsertDate");
+     //builder.Entity<User>().Property<DateTime?>("UpdateDate");
+     //builder.Entity<User>().Property<DateTime?>("RemoveDate");
+     //builder.Entity<User>().Property<bool>("IsRemove");
+     //use Reflection
+
+     base.OnModelCreating(builder);
+ }
+       
+    }
+}
+===========================================
+
+

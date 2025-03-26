@@ -1,0 +1,48 @@
+﻿@model Application.ViewModel.FileUpload.FileUploadViewModel
+
+<div class="container mt-5">
+    <h2>آپلود فایل</h2>
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+    <form asp-action="Upload" enctype="multipart/form-data" method="post" class="p-4 bg-light rounded shadow">
+        <div class="mb-3">
+            <label asp-for="FileName" class="form-label"></label>
+            <input asp-for="FileName" class="form-control" />
+            <span asp-validation-for="FileName" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">فایل</label>
+            <input type="file" name="file" class="form-control" required />
+            <span class="text-danger">@Html.ValidationMessage("File")</span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="AttachmentTypeId" class="form-label">نوع پیوست</label>
+            <select asp-for="AttachmentTypeId" class="form-control" asp-items="@(new SelectList(ViewBag.AttachmentTypes, "Id", "Name"))"></select>
+            <span asp-validation-for="AttachmentTypeId" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="EntityId" class="form-label">مشتری</label>
+            <select asp-for="EntityId" class="form-control" asp-items="@(new SelectList(ViewBag.Customers, "Id", "Name"))"></select>
+            <span asp-validation-for="EntityId" class="text-danger"></span>
+            <input asp-for="EntityType" type="hidden" value="Customer" />
+        </div>
+        <div>
+            <input type="hidden" name="UploadedBy" value="Admin" />
+            <input type="hidden" name="UploadDate" value="2025, 2, 1" />
+        </div>
+        <button type="submit" class="btn btn-primary">آپلود</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

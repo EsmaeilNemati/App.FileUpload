@@ -1,0 +1,101 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DocumentManagement</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.rtl.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="#">مدیریت مستندات</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="FileUpload" asp-action="Index">فایل‌ها</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="AttachmentType" asp-action="Index">انواع پیوست</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Customer" asp-action="Index">مشتریان</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container">
+        <!-- контейнер Toast در پایین سمت راست -->
+        <div class="position-fixed bottom-0 start-0 p-3" style="z-index: 1050;">
+            <div id="toastContainer"></div>
+        </div>
+
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- اسکریپت نمایش Toast -->
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            var toastContainer = document.getElementById("toastContainer")
+
+            // نمایش Toast خطا
+        @if (TempData["ErrorMessage"] != null)
+        {
+            var errorMessage = Html.Raw(Json.Serialize(TempData["ErrorMessage"]));
+            <text>
+                    var errorToast = `
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                            <div class="toast-header bg-danger text-white">
+                                <strong class="me-auto">خطا</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">${@errorMessage}</div>
+                        </div>
+                    `
+                    toastContainer.innerHTML += errorToast
+            </text>
+        }
+
+            // نمایش Toast موفقیت
+        @if (TempData["SuccessMessage"] != null)
+        {
+            var successMessage = Html.Raw(Json.Serialize(TempData["SuccessMessage"]));
+            <text>
+                    var successToast = `
+                        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="true" data-bs-delay="5000">
+                            <div class="toast-header bg-success text-white">
+                                <strong class="me-auto">موفقیت</strong>
+                                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                            <div class="toast-body">${@successMessage}</div>
+                        </div>
+                    `
+                    toastContainer.innerHTML += successToast
+            </text>
+        }
+
+            // فعال‌سازی همه Toast‌ها
+            var toasts = document.querySelectorAll(".toast")
+            toasts.forEach(function (toast) {
+                new bootstrap.Toast(toast).show()
+            })
+        })
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

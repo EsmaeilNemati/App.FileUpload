@@ -1,0 +1,23 @@
+﻿@model List<Application.ViewModel.AttachmentType.AttachmentTypeViewModel>
+
+<div class="container mt-5">
+    <h2>لیست انواع پیوست</h2>
+    <a asp-action="Create" class="btn btn-success mb-3">افزودن نوع جدید</a>
+    <table class="table table-striped table-responsive">
+        <thead>
+            <tr>
+                <th>شناسه</th>
+                <th>نام</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var type in Model)
+            {
+                <tr>
+                    <td>@type.Id</td>
+                    <td>@type.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
